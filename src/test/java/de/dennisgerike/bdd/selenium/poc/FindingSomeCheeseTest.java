@@ -1,3 +1,5 @@
+package de.dennisgerike.bdd.selenium.poc;
+
 import io.cucumber.java.After;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
