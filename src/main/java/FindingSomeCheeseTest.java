@@ -1,17 +1,17 @@
 import io.cucumber.java.After;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
 
 import java.time.Duration;
 
-public class ExampleSteps {
+public class FindingSomeCheeseTest {
 
     private final WebDriver driver = new FirefoxDriver();
 
@@ -25,9 +25,7 @@ public class ExampleSteps {
     @When("I search for {string}")
     public void search_for(String query) {
         WebElement element = driver.findElement(By.name("q"));
-        // Enter something to search for
         element.sendKeys(query);
-        // Now submit the form. WebDriver will find the form for us from the element
         element.submit();
     }
 
