@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MoreCarsSteps {
@@ -41,5 +42,26 @@ public class MoreCarsSteps {
         for (WebElement section : sections) {
             assertTrue(section.findElements(By.cssSelector("ul li")).size() > 0);
         }
+    }
+
+    @Then("there should be a {string} section")
+    public void there_should_be_a_section(String sectionName) {
+        String effectiveSectionName = sectionName;
+        if (sectionName.equals("Latest Cars")) {
+            effectiveSectionName = "Latest Additions";
+        }
+        By locator = By.xpath("//section//h2[contains(., '" + effectiveSectionName + "')]");
+        assertTrue(driver.findElements(locator).size() > 0, "Missing section: " + sectionName);
+    }
+
+    @Then("the {string} list should contain {int} entries")
+    public void the_list_should_contain_entries(String sectionName, int count) {
+        String testId = "";
+        if (sectionName.equals("Latest Cars")) {
+            testId = "latest-additions-section";
+        }
+        By locator = By.cssSelector("section[data-testid='" + testId + "'] ul li");
+        List<WebElement> entries = driver.findElements(locator);
+        assertEquals(count, entries.size(), "Expected " + count + " entries but found " + entries.size());
     }
 }

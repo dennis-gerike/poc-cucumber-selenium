@@ -1,4 +1,4 @@
-Feature: More Cars - Start Page
+Feature: More Cars - Start Page - Node Type Sections
 
   Scenario: Start page contains node type sections
     When the user visits the start page
