@@ -1,8 +1,8 @@
-package com.example.steps;
+package net.more_cars.steps;
 
-import com.example.driver.DriverManager;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import net.more_cars.driver.DriverManager;
 
 public class Hooks {
     private final DriverManager driverManager;

@@ -1,9 +1,9 @@
-package com.example.steps;
+package net.more_cars.steps;
 
-import com.example.driver.DriverManager;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import net.more_cars.driver.DriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;

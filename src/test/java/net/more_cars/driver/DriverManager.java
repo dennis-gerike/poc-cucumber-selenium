@@ -1,4 +1,4 @@
-package com.example.driver;
+package net.more_cars.driver;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
