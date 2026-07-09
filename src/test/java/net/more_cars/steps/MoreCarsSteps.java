@@ -5,6 +5,7 @@ import io.cucumber.java.en.When;
 import net.more_cars.driver.DriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
@@ -31,6 +32,14 @@ public class MoreCarsSteps {
         for (String sectionName : sectionNames) {
             By locator = By.xpath("//section//h2[contains(., '" + sectionName + "')]");
             assertTrue(driver.findElements(locator).size() > 0, "Missing section: " + sectionName);
+        }
+    }
+
+    @Then("each section should contain at least one node type")
+    public void each_section_should_contain_at_least_one_node_type() {
+        List<WebElement> sections = driver.findElements(By.cssSelector("section[data-testid='node-type-group-section']"));
+        for (WebElement section : sections) {
+            assertTrue(section.findElements(By.cssSelector("ul li")).size() > 0);
         }
     }
 }
