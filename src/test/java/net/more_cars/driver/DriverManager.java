@@ -14,7 +14,7 @@ public class DriverManager {
 
     public WebDriver getDriver() {
         if (driver == null) {
-            WebDriverManager.chromedriver().setup();
+            WebDriverManager.chromedriver().browserVersion("149").setup();
             ChromeOptions options = new ChromeOptions();
             options.addArguments("--headless=new");
             options.addArguments("--no-sandbox");
