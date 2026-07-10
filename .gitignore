@@ -5,3 +5,4 @@ target/
 .DS_Store
 jenkins_home
 maven_repo
+selenium_cache

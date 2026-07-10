@@ -75,7 +75,7 @@ cat jenkins_home/secrets/initialAdminPassword
 
 - **Modern Infrastructure**: Uses Jenkins 2.568.1 (JDK 21) and custom-built `poc-selenium-test-runner` (JDK 21 + Chrome).
 - **Persistence**: Data is persisted in the `jenkins/jenkins_home` directory on the host.
-- **Dependency Caching**: Maven dependencies are cached in `jenkins/maven_repo` on the host to speed up subsequent builds.
+- **Dependency Caching**: Maven dependencies and Selenium drivers are cached in `jenkins/maven_repo` and `jenkins/selenium_cache` on the host to speed up subsequent builds.
 - **Docker-out-of-Docker (DooD)**: The Docker socket is mounted, allowing Jenkins to run Docker commands for building
   and testing containers.
 - **Selenium Tests Job**: A Pipeline job named `selenium-tests` is pre-configured to run tests using the modern test runner.
