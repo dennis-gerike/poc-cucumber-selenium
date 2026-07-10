@@ -17,6 +17,8 @@ pipeline {
                     // Run tests in the container, mounting the host workspace path to the same container path.
                     // This ensures results are written directly to the Jenkins workspace.
                     docker.image('poc-selenium-test-runner:latest').inside("-v ${workspaceHostPath}:${env.WORKSPACE} -w ${env.WORKSPACE}") {
+                        // Ensure output directory exists
+                        sh 'mkdir -p target/cucumber-reports'
                         sh 'mvn test'
                     }
                 }
