@@ -11,15 +11,17 @@ pipeline {
                     // Calculate the host path of the current workspace for Docker-out-of-Docker (DooD)
                     // The Jenkins controller's /var/jenkins_home is mapped to ${HOST_PROJECT_ROOT}/jenkins/jenkins_home on the host.
                     def workspaceHostPath = env.WORKSPACE.replace("/var/jenkins_home", "${HOST_PROJECT_ROOT}/jenkins/jenkins_home")
+                    def mavenRepoHostPath = "${HOST_PROJECT_ROOT}/jenkins/maven_repo"
                     
                     echo "Mapping host workspace ${workspaceHostPath} to container workspace ${env.WORKSPACE}"
+                    echo "Using Maven repository cache at ${mavenRepoHostPath}"
                     
-                    // Run tests in the container, mounting the host workspace path to the same container path.
-                    // This ensures results are written directly to the Jenkins workspace.
-                    docker.image('poc-selenium-test-runner:latest').inside("-v ${workspaceHostPath}:${env.WORKSPACE} -w ${env.WORKSPACE}") {
+                    // Run tests in the container, mounting the host workspace path and maven repo cache.
+                    // This ensures results are written directly to the Jenkins workspace and dependencies are cached.
+                    docker.image('poc-selenium-test-runner:latest').inside("-v ${workspaceHostPath}:${env.WORKSPACE} -v ${mavenRepoHostPath}:/maven-repo -w ${env.WORKSPACE}") {
                         // Ensure output directory exists
                         sh 'mkdir -p target/cucumber-reports'
-                        sh 'mvn test'
+                        sh 'mvn test -Dmaven.repo.local=/maven-repo'
                     }
                 }
             }
