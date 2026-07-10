@@ -28,7 +28,20 @@ To execute all Selenium tests, run the following command:
 mvn test
 ```
 
-The tests are configured to run in **headless mode** by default.
+The tests are configured to run in **headless mode** by default. To run with a visible browser, set the `HEADLESS` environment variable to `false`:
+
+```bash
+HEADLESS=false mvn test
+```
+
+## Troubleshooting
+
+### Permission issues in `target/`
+If you encounter `Operation not permitted` errors when running tests locally, it might be due to files created by the Jenkins Docker container. You can fix this by removing the `target` directory:
+
+```bash
+docker run --rm -v $(pwd):/app -w /app alpine rm -rf target
+```
 
 ## Test Reports
 
@@ -110,5 +123,5 @@ After a build completes, you can view the results in several ways:
 - `src/test/java/net/more_cars/driver/DriverManager.java`: Manages the Selenium WebDriver instance.
 - `src/test/java/net/more_cars/steps/`: Contains Step Definition classes.
 - `src/test/resources/features/`: Contains Cucumber feature files.
-- `src/test/resources/cucumber.properties`: Configuration for Cucumber.
+- `src/test/resources/junit-platform.properties`: Configuration for Cucumber (JUnit 5).
 - `jenkins/`: Contains Jenkins Docker Compose configuration and persisted data.

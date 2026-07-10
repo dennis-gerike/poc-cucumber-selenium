@@ -16,7 +16,9 @@ public class DriverManager {
         if (driver == null) {
             WebDriverManager.chromedriver().setup();
             ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless=new");
+            if (!"false".equalsIgnoreCase(System.getenv("HEADLESS"))) {
+                options.addArguments("--headless=new");
+            }
             options.addArguments("--no-sandbox");
             options.addArguments("--disable-dev-shm-usage");
             options.addArguments("--window-size=1920,1080");
@@ -30,7 +32,7 @@ public class DriverManager {
 
     public WebDriverWait getWait() {
         if (wait == null) {
-            wait = new WebDriverWait(getDriver(), Duration.ofSeconds(10));
+            wait = new WebDriverWait(getDriver(), Duration.ofSeconds(5));
         }
         return wait;
     }
