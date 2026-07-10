@@ -1,32 +1,38 @@
 pipeline {
     agent any
     environment {
-        // In a real setup, this might be dynamically determined or passed as a parameter
+        // Host path to the project root - required to calculate workspace host path for DooD
         HOST_PROJECT_ROOT = "/home/dennis/Documents/projects/dennis-gerike/poc-cucumber-selenium"
     }
     stages {
         stage('Build & Test') {
             steps {
                 script {
-                    // Fix for dubious ownership inside the container
-                    sh 'git config --global --add safe.directory /workspace || true'
-                    // Using the modern Jenkins Docker DSL
-                    docker.image('poc-selenium-test-runner:latest').inside("-v ${HOST_PROJECT_ROOT}:/app -w /app") {
+                    // Calculate the host path of the current workspace for Docker-out-of-Docker (DooD)
+                    // The Jenkins controller's /var/jenkins_home is mapped to ${HOST_PROJECT_ROOT}/jenkins/jenkins_home on the host.
+                    def workspaceHostPath = env.WORKSPACE.replace("/var/jenkins_home", "${HOST_PROJECT_ROOT}/jenkins/jenkins_home")
+                    
+                    echo "Mapping host workspace ${workspaceHostPath} to container workspace ${env.WORKSPACE}"
+                    
+                    // Run tests in the container, mounting the host workspace path to the same container path.
+                    // This ensures results are written directly to the Jenkins workspace.
+                    docker.image('poc-selenium-test-runner:latest').inside("-v ${workspaceHostPath}:${env.WORKSPACE} -w ${env.WORKSPACE}") {
                         sh 'mvn test'
                     }
-                    // Copy results to the Jenkins workspace so plugins can find them
-                    sh 'mkdir -p target && cp -r /workspace/target/* target/ || true'
                 }
             }
         }
     }
     post {
         always {
-            junit '**/target/surefire-reports/*.xml'
+            // Jenkins plugins will now find these files directly in the workspace
+            junit testResults: '**/target/surefire-reports/*.xml', allowEmptyResults: true
+            
             cucumber buildStatus: 'null',
                      fileIncludePattern: '**/cucumber.json',
                      jsonReportDirectory: 'target/cucumber-reports',
                      sortingMethod: 'ALPHABETICAL'
+            
             publishHTML([allowMissing: true,
                          alwaysLinkToLastBuild: true,
                          keepAll: true,
@@ -34,7 +40,8 @@ pipeline {
                          reportFiles: 'cucumber.html',
                          reportName: 'Cucumber HTML Report',
                          reportTitles: ''])
-            archiveArtifacts artifacts: '**/target/cucumber-reports/**/*', allowEmptyArchive: true
+            
+            archiveArtifacts artifacts: 'target/cucumber-reports/**/*', allowEmptyArchive: true
         }
     }
 }
