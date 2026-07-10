@@ -1,6 +1,6 @@
 services:
   jenkins:
-    image: jenkins/jenkins:lts
+    build: .
     privileged: true
     user: root
     ports:
@@ -10,4 +10,14 @@ services:
     volumes:
       - ./jenkins_home:/var/jenkins_home
       - /var/run/docker.sock:/var/run/docker.sock
+      - ..:/workspace
     restart: unless-stopped
+
+  test-runner:
+    build:
+      context: .
+      dockerfile: test-runner.Dockerfile
+    image: poc-selenium-test-runner:latest
+    container_name: test-runner-builder
+    # This service is just for building the image, not running it
+    entrypoint: ["/bin/true"]

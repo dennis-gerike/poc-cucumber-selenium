@@ -6,9 +6,10 @@ This project is a Proof of Concept (POC) for automated web testing using Cucumbe
 
 To run the tests, you need the following installed on your system:
 
-- **Java 17** or higher
-- **Maven 3.6** or higher
+- **Java 21** (LTS)
+- **Maven 3.9** or higher
 - **Google Chrome** browser
+- **Docker** and **Docker Compose** (for Jenkins setup)
 
 ## Installation
 
@@ -32,6 +33,7 @@ The tests are configured to run in **headless mode** by default.
 ## Test Reports
 
 After running the tests, you can find the execution reports in:
+
 - HTML Report: `target/cucumber-reports/cucumber.html`
 - JUnit XML Report: `target/surefire-reports/TEST-net.more_cars.RunCucumberTest.xml`
 
@@ -58,18 +60,39 @@ A Jenkins environment is provided via Docker Compose for CI/CD purposes.
 ### Initial Admin Password
 
 To retrieve the initial admin password, run:
+
 ```bash
 docker logs jenkins-lts
 ```
+
 Or check the file in the persisted volume:
+
 ```bash
 cat jenkins_home/secrets/initialAdminPassword
 ```
 
 ### Features
 
+- **Modern Infrastructure**: Uses Jenkins 2.568.1 (JDK 21) and custom-built `poc-selenium-test-runner` (JDK 21 + Chrome).
 - **Persistence**: Data is persisted in the `jenkins/jenkins_home` directory on the host.
-- **Docker-out-of-Docker (DooD)**: The Docker socket is mounted, allowing Jenkins to run Docker commands for building and testing containers.
+- **Docker-out-of-Docker (DooD)**: The Docker socket is mounted, allowing Jenkins to run Docker commands for building
+  and testing containers.
+- **Selenium Tests Job**: A Pipeline job named `selenium-tests` is pre-configured to run tests using the modern test runner.
+
+### Running Selenium Tests in Jenkins
+
+1. Access Jenkins at [http://localhost:8080](http://localhost:8080).
+2. Login (if required).
+3. Select the `selenium-tests` job.
+4. Click **Build Now**.
+
+The job will:
+
+1. Start a `poc-selenium-test-runner` container (modern Maven 3.9 + JDK 21 + Chrome).
+2. Use the Jenkins Docker DSL for execution.
+3. Clone the repository from the local `/workspace` mount.
+3. Execute `mvn test`.
+4. Archive JUnit reports and Cucumber HTML reports.
 
 ## Project Structure
 
