@@ -35,6 +35,42 @@ After running the tests, you can find the execution reports in:
 - HTML Report: `target/cucumber-reports/cucumber.html`
 - JUnit XML Report: `target/surefire-reports/TEST-net.more_cars.RunCucumberTest.xml`
 
+## Jenkins Setup
+
+A Jenkins environment is provided via Docker Compose for CI/CD purposes.
+
+### Starting Jenkins
+
+1. Navigate to the `jenkins` directory:
+   ```bash
+   cd jenkins
+   ```
+2. Start the container:
+   ```bash
+   docker compose up -d
+   ```
+
+### Accessing Jenkins
+
+- **Web UI**: [http://localhost:8080](http://localhost:8080)
+- **Agent Port**: `50010` (mapped from Jenkins internal `50000`)
+
+### Initial Admin Password
+
+To retrieve the initial admin password, run:
+```bash
+docker logs jenkins-lts
+```
+Or check the file in the persisted volume:
+```bash
+cat jenkins_home/secrets/initialAdminPassword
+```
+
+### Features
+
+- **Persistence**: Data is persisted in the `jenkins/jenkins_home` directory on the host.
+- **Docker-out-of-Docker (DooD)**: The Docker socket is mounted, allowing Jenkins to run Docker commands for building and testing containers.
+
 ## Project Structure
 
 - `src/test/java/net/more_cars/RunCucumberTest.java`: JUnit Suite runner for Cucumber.
@@ -42,3 +78,4 @@ After running the tests, you can find the execution reports in:
 - `src/test/java/net/more_cars/steps/`: Contains Step Definition classes.
 - `src/test/resources/features/`: Contains Cucumber feature files.
 - `src/test/resources/cucumber.properties`: Configuration for Cucumber.
+- `jenkins/`: Contains Jenkins Docker Compose configuration and persisted data.
