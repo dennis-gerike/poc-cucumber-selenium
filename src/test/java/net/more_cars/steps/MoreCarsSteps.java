@@ -6,6 +6,7 @@ import net.more_cars.driver.DriverManager;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
@@ -26,6 +27,7 @@ public class MoreCarsSteps {
     @When("the user visits the start page")
     public void the_user_visits_the_start_page() {
         driver.get("https://more-cars.net");
+        this.wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("header div a")));
     }
 
     @Then("the page should contain the following sections")
