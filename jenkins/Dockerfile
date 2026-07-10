@@ -17,6 +17,6 @@ RUN apt-get update && \
 RUN git config --system --add safe.directory '*'
 
 # Pre-install plugins
-RUN jenkins-plugin-cli --plugins "docker-workflow git workflow-aggregator pipeline-stage-view"
+RUN jenkins-plugin-cli --plugins "docker-workflow git workflow-aggregator pipeline-stage-view cucumber-reports htmlpublisher"
 
 USER jenkins

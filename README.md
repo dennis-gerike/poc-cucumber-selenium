@@ -93,6 +93,15 @@ The job will:
 3. Clone the repository from the local `/workspace` mount.
 3. Execute `mvn test`.
 4. Archive JUnit reports and Cucumber HTML reports.
+5. Generate **Cucumber Reports** and **HTML Reports** directly in Jenkins for easy consumption.
+
+### Viewing Test Results
+
+After a build completes, you can view the results in several ways:
+
+1. **Cucumber Reports**: Click the "Cucumber Reports" link in the left sidebar of the job to see a detailed, graphical breakdown of test results.
+2. **HTML Report**: Click the "Cucumber HTML Report" link in the left sidebar to view the standard Cucumber HTML report directly in the browser.
+3. **JUnit Results**: Click the "Test Result" link to see the standard JUnit-style report.
 
 ## Project Structure
 
