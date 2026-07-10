@@ -8,6 +8,8 @@ pipeline {
         stage('Build & Test') {
             steps {
                 script {
+                    // Fix for dubious ownership inside the container
+                    sh 'git config --global --add safe.directory /workspace || true'
                     // Using the modern Jenkins Docker DSL
                     docker.image('poc-selenium-test-runner:latest').inside("-v ${HOST_PROJECT_ROOT}:/app -w /app") {
                         sh 'mvn test'

@@ -7,5 +7,8 @@ RUN apt-get update && apt-get install -y wget gnupg && \
     apt-get update && apt-get install -y google-chrome-stable && \
     rm -rf /var/lib/apt/lists/*
 
+# Fix for dubious ownership in mounted volumes
+RUN git config --global --add safe.directory '*'
+
 # Verify versions
 RUN mvn -version && google-chrome --version
